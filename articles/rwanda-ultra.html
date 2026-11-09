@@ -217,7 +217,50 @@
         </div>
       </section>
     </div>
-  </main>
-  <footer class="site-footer"><div class="container footer-inner"><a class="brand footer-brand" href="../index.html" aria-label="Ben Coxford, home"><img class="brand-logo" src="../assets/bc-logo.png" alt=""><span class="brand-name">BEN COXFORD</span></a><p>BUILT WITH CURIOSITY &amp; INTENTION.</p><div><a href="../index.html">Home ↗</a><a href="https://www.justgiving.com/page/bencoxford">JustGiving ↗</a><a href="mailto:ben.coxford@gmail.com">Email ↗</a></div></div></footer>
-</body>
+  <div class="lightbox" id="lightbox">
+    <button class="lightbox-close" onclick="closeLightbox()">&times;</button>
+    <img id="lightbox-img" src="" alt="">
+  </div>
+  <script>
+    // Lazy load images
+    if ('IntersectionObserver' in window) {
+      const images = document.querySelectorAll('img[data-src]');
+      const imageObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            const img = entry.target;
+            img.src = img.dataset.src;
+            img.removeAttribute('data-src');
+            imageObserver.unobserve(img);
+          }
+        });
+      });
+      images.forEach(img => imageObserver.observe(img));
+    }
+
+    // Lightbox functionality
+    function openLightbox(src) {
+      const lightbox = document.getElementById('lightbox');
+      const img = document.getElementById('lightbox-img');
+      img.src = src;
+      lightbox.classList.add('active');
+    }
+
+    function closeLightbox() {
+      document.getElementById('lightbox').classList.remove('active');
+    }
+
+    document.getElementById('lightbox').addEventListener('click', function(e) {
+      if (e.target === this) closeLightbox();
+    });
+
+    // Add click handlers to gallery images
+    document.querySelectorAll('.gallery-item img').forEach(img => {
+      img.addEventListener('click', function() {
+        openLightbox(this.src.replace('-src', ''));
+      });
+    });
+  </script>
 </html>
+
+
