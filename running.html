@@ -7,7 +7,7 @@
   <meta name="theme-color" content="#111714">
   <title>Running | Ben Coxford</title>
   <link rel="icon" type="image/png" href="assets/bc-logo.png">
-  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="styles.css?v=20261109-running-gallery">
 </head>
 <body>
   <a class="skip-link" href="#main">Skip to content</a>
@@ -34,12 +34,46 @@
     <section class="running-adventure"><div class="container running-adventure-inner"><img src="assets/running/running-adventure.jpg" alt="Ben beside a lake with mountains in the background." loading="lazy"><div><p class="eyebrow">THE ROAD AHEAD</p><h2>More than<br>the finish line<span class="accent">.</span></h2><p>From marathon training to exploring new places on foot, the journey is as much a part of the story as race day.</p><a class="inline-link" href="https://www.justgiving.com/page/bencoxford">See my challenges on JustGiving <span aria-hidden="true">↗</span></a></div></div></section>
     <section class="container section" aria-labelledby="gallery-title">
       <div class="section-heading"><p class="eyebrow section-number">GALLERY</p><h2 id="gallery-title">Moments on the miles<span class="accent">.</span></h2></div>
-      <div class="gallery-grid">
+      <div class="gallery-grid running-gallery" aria-label="Running photos">
         <img src="assets/running/mind-race-finish.jpg" alt="Celebrating at the finish line with arms raised" loading="lazy">
         <img src="assets/running/mind-race-animation.gif" alt="Animated race moment" loading="lazy">
       </div>
     </section>
   </main>
   <footer class="site-footer"><div class="container footer-inner"><a class="brand footer-brand" href="index.html" aria-label="Ben Coxford, home"><img class="brand-logo" src="assets/bc-logo.png" alt=""><span class="brand-name">BEN COXFORD</span></a><p>BUILT WITH CURIOSITY &amp; INTENTION.</p><div><a href="index.html">Home ↗</a><a href="https://www.justgiving.com/page/bencoxford">JustGiving ↗</a><a href="mailto:ben.coxford@gmail.com">Email ↗</a></div></div></footer>
+  <script>
+    var gallery = document.querySelector('.running-gallery');
+    var photos = Array.from(gallery.querySelectorAll('img'));
+    if (photos.length > 1) {
+      var controls = document.createElement('div');
+      var previous = document.createElement('button');
+      var next = document.createElement('button');
+      var galleryStatus = document.createElement('span');
+      var current = 0;
+      controls.className = 'gallery-controls';
+      previous.type = next.type = 'button';
+      previous.textContent = '← Previous';
+      next.textContent = 'Next →';
+      previous.setAttribute('aria-label', 'Previous photo');
+      next.setAttribute('aria-label', 'Next photo');
+      galleryStatus.setAttribute('aria-live', 'polite');
+      galleryStatus.setAttribute('aria-atomic', 'true');
+      controls.append(previous, galleryStatus, next);
+      gallery.after(controls);
+      gallery.classList.add('is-carousel');
+
+      function showPhoto(index) {
+        current = (index + photos.length) % photos.length;
+        photos.forEach(function (photo, photoIndex) {
+          photo.hidden = photoIndex !== current;
+        });
+        galleryStatus.textContent = 'Photo ' + (current + 1) + ' of ' + photos.length;
+      }
+
+      previous.addEventListener('click', function () { showPhoto(current - 1); });
+      next.addEventListener('click', function () { showPhoto(current + 1); });
+      showPhoto(current);
+    }
+  </script>
 </body>
 </html>
